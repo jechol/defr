@@ -4,9 +4,9 @@ defmodule Defr do
   defmodule InOut do
     defstruct input: %{}, output: []
 
-    # def new(input) do
-    #   %__MODULE__{input: input, output: []}
-    # end
+    def new(%{} = input) do
+      %__MODULE__{input: input, output: []}
+    end
   end
 
   defmacro __using__(_) do

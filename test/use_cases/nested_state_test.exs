@@ -1,4 +1,4 @@
-defmodule Defr.NestedCallTest do
+defmodule Defr.NestedStateTest do
   use ExUnit.Case, async: true
   use Defr
   alias Algae.State
@@ -45,18 +45,18 @@ defmodule Defr.NestedCallTest do
   test "inject 2nd layer" do
     assert [{:get_user_by_id, 1}] == Accounts.__defr_funs__()
 
-    assert %Right{right: %User{id: 2, name: "chrismccord"}} ==
+    assert {%Right{right: %User{id: 2, name: "chrismccord"}}, []} ==
              UserController.profile("2")
              |> Defr.run(%{
                &User.get_by_id/1 => fn _ ->
-                 State.new(fn _ -> Right.new(%User{id: 2, name: "chrismccord"}) end)
+                 State.new(fn state -> {Right.new(%User{id: 2, name: "chrismccord"}), state} end)
                end
              })
 
     # with `mock` macro
-    assert %Right{right: %User{id: 2, name: "chrismccord"}} ==
+    assert {%Right{right: %User{id: 2, name: "chrismccord"}}, []} ==
              UserController.profile("2")
-             |> State.run(
+             |> Defr.run(
                mock(%{
                  &User.get_by_id/1 => Right.new(%User{id: 2, name: "chrismccord"})
                })
