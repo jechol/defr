@@ -1,19 +1,15 @@
 defmodule Defr.Runner do
-  alias Defr.InOut
   alias Algae.State
 
   def run({m, f, a}, args, input) do
+    {{m, f, a}, args, input}
     fun = :erlang.make_fun(m, f, a)
     ret = Map.get(input, fun, fun) |> :erlang.apply(args)
 
     case ret do
       %State{} = state ->
-        {value, %InOut{input: input, output: new_output}} = state |> State.run(input)
-
-        State.modify(fn %InOut{input: ^input, output: output} ->
-          %InOut{input: input, output: output ++ new_output}
-        end)
-
+        {value, new_output} = state |> Defr.run(input)
+        Defr.tell(new_output)
         value
 
       value ->

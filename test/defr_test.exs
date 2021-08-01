@@ -1,7 +1,7 @@
 defmodule DefrTest do
   use ExUnit.Case, async: true
   use Defr
-  alias Algae.Reader
+  alias Algae.State
 
   defmodule Nested do
     defmodule DoubleNested do
@@ -51,22 +51,22 @@ defmodule DefrTest do
     end
 
     test "original works" do
-      assert Foo.bar(:mod) |> Reader.run(%{}) == :arity_0_quack
-      assert Foo.bar(:remote) |> Reader.run(%{}) == 2
-      assert Foo.bar(:nested_remote) |> Reader.run(%{}) == {99, :hello}
-      assert Foo.bar(:pipe) |> Reader.run(%{}) == "1"
-      assert Foo.bar(:macro) |> Reader.run(%{}) == 30
-      assert (Foo.bar(:capture) |> Reader.run(%{})).(20, 40) == 60
-      assert Foo.bar(:kernel_plus) |> Reader.run(%{}) == 11
-      assert Foo.bar(:string_to_atom) |> Reader.run(%{}) == :foobar
-      assert Foo.bar(:string_to_integer) |> Reader.run(%{}) == 100
+      assert Foo.bar(:mod) |> State.run(%{}) == :arity_0_quack
+      assert Foo.bar(:remote) |> State.run(%{}) == 2
+      assert Foo.bar(:nested_remote) |> State.run(%{}) == {99, :hello}
+      assert Foo.bar(:pipe) |> State.run(%{}) == "1"
+      assert Foo.bar(:macro) |> State.run(%{}) == 30
+      assert (Foo.bar(:capture) |> State.run(%{})).(20, 40) == 60
+      assert Foo.bar(:kernel_plus) |> State.run(%{}) == 11
+      assert Foo.bar(:string_to_atom) |> State.run(%{}) == :foobar
+      assert Foo.bar(:string_to_integer) |> State.run(%{}) == 100
 
-      assert Foo.bar(:local) |> Reader.run(%{}) == :arity_0_quack
-      assert Foo.bar(:import) |> Reader.run(%{}) == 10
-      assert Foo.bar(:anonymous_fun) |> Reader.run(%{}) == [1, 2]
-      assert Foo.bar(:string_concat) |> Reader.run(%{}) == "*1**2*"
+      assert Foo.bar(:local) |> State.run(%{}) == :arity_0_quack
+      assert Foo.bar(:import) |> State.run(%{}) == 10
+      assert Foo.bar(:anonymous_fun) |> State.run(%{}) == [1, 2]
+      assert Foo.bar(:string_concat) |> State.run(%{}) == "*1**2*"
 
-      assert Foo.hash("hello") |> Reader.run(%{}) ==
+      assert Foo.hash("hello") |> State.run(%{}) ==
                <<93, 65, 64, 42, 188, 75, 42, 118, 185, 113, 157, 145, 16, 23, 197, 146>>
     end
 
@@ -77,33 +77,33 @@ defmodule DefrTest do
     end
 
     test "working case" do
-      assert Foo.bar(:mod) |> Reader.run(%{&Foo.quack/0 => fn -> :injected end}) ==
+      assert Foo.bar(:mod) |> State.run(%{&Foo.quack/0 => fn -> :injected end}) ==
                :injected
 
-      assert Foo.bar(:remote) |> Reader.run(%{&Enum.count/1 => fn _ -> 9999 end}) ==
+      assert Foo.bar(:remote) |> State.run(%{&Enum.count/1 => fn _ -> 9999 end}) ==
                9999
 
       assert Foo.bar(:nested_remote)
-             |> Reader.run(%{
+             |> State.run(%{
                &DoubleNested.to_int/1 => &Baz.to_int/1,
                &DoubleNested.to_atom/1 => &Baz.to_atom/1
              }) == {"baz to_int", "baz to_atom"}
 
       assert Foo.bar(:nested_remote)
-             |> Reader.run(mock(%{&DoubleNested.to_atom/1 => :mocked})) ==
+             |> State.run(mock(%{&DoubleNested.to_atom/1 => :mocked})) ==
                {99, :mocked}
 
       assert Foo.bar(:pipe)
-             |> Reader.run(%{&Foo.id/1 => fn _ -> "100" end, &Enum.count/1 => fn _ -> 9999 end}) ==
+             |> State.run(%{&Foo.id/1 => fn _ -> "100" end, &Enum.count/1 => fn _ -> 9999 end}) ==
                "100"
 
-      assert Foo.bar(:macro) |> Reader.run(%{&Calc.sum/2 => fn _, _ -> 999 end}) ==
+      assert Foo.bar(:macro) |> State.run(%{&Calc.sum/2 => fn _, _ -> 999 end}) ==
                30
 
-      assert Foo.bar(:string_to_atom) |> Reader.run(%{&String.to_atom/1 => fn _ -> :injected end}) ==
+      assert Foo.bar(:string_to_atom) |> State.run(%{&String.to_atom/1 => fn _ -> :injected end}) ==
                :injected
 
-      assert Foo.hash("hello") |> Reader.run(%{&:crypto.hash/2 => fn _, _ -> :world end}) ==
+      assert Foo.hash("hello") |> State.run(%{&:crypto.hash/2 => fn _, _ -> :world end}) ==
                :world
     end
   end

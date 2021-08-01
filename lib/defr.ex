@@ -1,4 +1,6 @@
 defmodule Defr do
+  alias Algae.State
+
   defmodule InOut do
     defstruct input: %{}, output: []
 
@@ -11,11 +13,25 @@ defmodule Defr do
     quote do
       import Defr, only: :macros
       use Witchcraft.Monad
+      alias Defr.InOut
 
       Module.register_attribute(__MODULE__, :defr_funs, accumulate: true)
       @before_compile unquote(Defr.Inject)
     end
   end
+
+  def run(%State{} = state, %{} = input) do
+    {value, %InOut{input: ^input, output: output}} = state |> State.run(%InOut{input: input})
+    {value, output}
+  end
+
+  def tell(new_output) when is_list(new_output) do
+    State.modify(fn %InOut{input: input, output: output} ->
+      %InOut{input: input, output: output ++ new_output}
+    end)
+  end
+
+  def tell(new_output), do: tell([new_output])
 
   @doc """
   `defr` transforms a function to accept a map where dependent functions and modules can be injected.
