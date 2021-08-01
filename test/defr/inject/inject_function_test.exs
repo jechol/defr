@@ -18,8 +18,8 @@ defmodule Defr.Inject.InjectFunctionTest do
         def add(a, b) do
           use Witchcraft.Monad
 
-          monad %Algae.Reader{} do
-            input <- Algae.Reader.ask()
+          monad %Algae.State{} do
+            %Defr.InOut{input: input} <- Algae.State.get()
 
             return(
               (

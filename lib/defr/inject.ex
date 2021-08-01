@@ -45,7 +45,7 @@ defmodule Defr.Inject do
                use Witchcraft.Monad
 
                monad %Algae.State{} do
-                 %Defr.InOut{input: input} <- Algae.State.ask()
+                 %Defr.InOut{input: input} <- Algae.State.get()
 
                  return(unquote(injected_blk))
                end
