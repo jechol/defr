@@ -4,6 +4,12 @@ defmodule Defr.NestedStateTest do
   alias Algae.State
   alias Algae.Either.Right
 
+  defmodule Repo do
+    def get(_schema, _id) do
+      raise "Shouldn't be called"
+    end
+  end
+
   defmodule User do
     use Defr
 

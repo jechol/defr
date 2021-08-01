@@ -18,7 +18,7 @@ defmodule Defr.Inject.InjectFunctionTest do
         def add(a, b) do
           use Witchcraft.Monad
 
-          monad %Algae.State{} do
+          monad %Algae.State{runner: nil} do
             %Defr.InOut{input: input} <- Algae.State.get()
 
             return(
@@ -48,6 +48,7 @@ defmodule Defr.Inject.InjectFunctionTest do
 
   defp env_with_macros do
     import Calc
+    dummy_for_suppress_unused_warning()
     __ENV__
   end
 end

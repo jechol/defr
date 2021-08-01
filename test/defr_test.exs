@@ -1,7 +1,6 @@
 defmodule DefrTest do
   use ExUnit.Case, async: true
   use Defr
-  alias Algae.State
 
   defmodule Nested do
     defmodule DoubleNested do

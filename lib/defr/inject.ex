@@ -44,7 +44,7 @@ defmodule Defr.Inject do
              quote do
                use Witchcraft.Monad
 
-               monad %Algae.State{} do
+               monad %Algae.State{runner: nil} do
                  %Defr.InOut{input: input} <- Algae.State.get()
 
                  return(unquote(injected_blk))
