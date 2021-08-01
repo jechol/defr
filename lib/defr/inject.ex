@@ -44,8 +44,8 @@ defmodule Defr.Inject do
              quote do
                use Witchcraft.Monad
 
-               monad %Algae.Reader{} do
-                 deps <- Algae.Reader.ask()
+               monad %Algae.State{} do
+                 %Defr.InOut{input: input} <- Algae.State.ask()
 
                  return(unquote(injected_blk))
                end
@@ -165,7 +165,7 @@ defmodule Defr.Inject do
       arity = Enum.count(args)
 
       quote do
-        Defr.Runner.run({unquote(mod), unquote(name), unquote(arity)}, unquote(args), deps)
+        Defr.Runner.run({unquote(mod), unquote(name), unquote(arity)}, unquote(args), input)
       end
     else
       ast

@@ -58,7 +58,7 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
         case 1 == 1 do
           x when x == true ->
-            Defr.Runner.run({Math, :pow, 2}, [2, x], deps)
+            Defr.Runner.run({Math, :pow, 2}, [2, x], input)
         end
       end
 
@@ -85,9 +85,9 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
     expected =
       quote do
-        Defr.Runner.run({Calc, :to_int, 1}, [a], deps) >>>
+        Defr.Runner.run({Calc, :to_int, 1}, [a], input) >>>
           fn a_int ->
-            Defr.Runner.run({Calc, :to_int, 1}, [b], deps) >>> fn b_int -> a_int + b_int end
+            Defr.Runner.run({Calc, :to_int, 1}, [b], input) >>> fn b_int -> a_int + b_int end
           end
       end
 
@@ -103,9 +103,9 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
     expected =
       quote do
-        Defr.Runner.run({Calc, :to_int, 1}, [a], deps) >>>
+        Defr.Runner.run({Calc, :to_int, 1}, [a], input) >>>
           fn a_int ->
-            (fn b_int -> a_int + b_int end).(Defr.Runner.run({Calc, :to_int, 1}, [b], deps))
+            (fn b_int -> a_int + b_int end).(Defr.Runner.run({Calc, :to_int, 1}, [b], input))
           end
       end
 
@@ -130,16 +130,16 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
     expected =
       quote do
         try do
-          Defr.Runner.run({Calc, :id, 1}, [:try], deps)
+          Defr.Runner.run({Calc, :id, 1}, [:try], input)
         rescue
           e in ArithmeticError ->
-            Defr.Runner.run({Calc, :id, 1}, [e], deps)
+            Defr.Runner.run({Calc, :id, 1}, [e], input)
         catch
           :error, number ->
-            Defr.Runner.run({Calc, :id, 1}, [number], deps)
+            Defr.Runner.run({Calc, :id, 1}, [number], input)
         else
           x ->
-            Defr.Runner.run({Calc, :id, 1}, [:else], deps)
+            Defr.Runner.run({Calc, :id, 1}, [:else], input)
         end
       end
 

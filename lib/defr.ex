@@ -1,4 +1,12 @@
 defmodule Defr do
+  defmodule InOut do
+    defstruct input: %{}, output: []
+
+    # def new(input) do
+    #   %__MODULE__{input: input, output: []}
+    # end
+  end
+
   defmacro __using__(_) do
     quote do
       import Defr, only: :macros
@@ -23,15 +31,15 @@ defmodule Defr do
 
   is expanded into (simplified to understand)
 
-      def send_welcome_email(user_id, deps \\\\ %{}) do
+      def send_welcome_email(user_id, input \\\\ %{}) do
         %{email: email} =
-          Map.get(deps, &Repo.get/2,
-            :erlang.make_fun(Map.get(deps, Repo, Repo), :get, 2)
+          Map.get(input, &Repo.get/2,
+            :erlang.make_fun(Map.get(input, Repo, Repo), :get, 2)
           ).(User, user_id)
 
         welcome_email(to: email)
-        |> Map.get(deps, &Mailer.send/1,
-            :erlang.make_fun(Map.get(deps, Mailer, Mailer), :send, 1)
+        |> Map.get(input, &Mailer.send/1,
+            :erlang.make_fun(Map.get(input, Mailer, Mailer), :send, 1)
           ).()
       end
 

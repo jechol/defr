@@ -19,11 +19,11 @@ defmodule Defr.Inject.InjectFunctionTest do
           use Witchcraft.Monad
 
           monad %Algae.Reader{} do
-            deps <- Algae.Reader.ask()
+            input <- Algae.Reader.ask()
 
             return(
               (
-                Defr.Runner.run({Calc, :sum, 2}, [a, b], deps)
+                Defr.Runner.run({Calc, :sum, 2}, [a, b], input)
 
                 (
                   import Calc
