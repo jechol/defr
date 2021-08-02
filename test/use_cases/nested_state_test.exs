@@ -1,6 +1,6 @@
-defmodule Defr.NestedStateTest do
+defmodule MagicWand.NestedStateTest do
   use ExUnit.Case, async: true
-  use Defr
+  use MagicWand
   alias Algae.State
   alias Algae.Either.Right
 
@@ -11,7 +11,7 @@ defmodule Defr.NestedStateTest do
   end
 
   defmodule User do
-    use Defr
+    use MagicWand
 
     defstruct [:id, :name]
 
@@ -21,7 +21,7 @@ defmodule Defr.NestedStateTest do
   end
 
   defmodule Accounts do
-    use Defr
+    use MagicWand
 
     defr get_user_by_id(user_id) do
       monad %Right{} do
@@ -32,7 +32,7 @@ defmodule Defr.NestedStateTest do
   end
 
   defmodule UserController do
-    use Defr
+    use MagicWand
 
     defr profile(user_id_str) do
       user_id = String.to_integer(user_id_str)
@@ -45,7 +45,7 @@ defmodule Defr.NestedStateTest do
 
     assert {%Right{right: %User{id: 1, name: "josevalim"}}, []} ==
              UserController.profile("1")
-             |> Defr.run(%{&Repo.get/2 => fn _, _ -> %User{id: 1, name: "josevalim"} end})
+             |> MagicWand.run(%{&Repo.get/2 => fn _, _ -> %User{id: 1, name: "josevalim"} end})
   end
 
   test "inject 2nd layer" do
@@ -53,7 +53,7 @@ defmodule Defr.NestedStateTest do
 
     assert {%Right{right: %User{id: 2, name: "chrismccord"}}, []} ==
              UserController.profile("2")
-             |> Defr.run(%{
+             |> MagicWand.run(%{
                &User.get_by_id/1 => fn _ ->
                  State.new(fn state -> {Right.new(%User{id: 2, name: "chrismccord"}), state} end)
                end
@@ -62,7 +62,7 @@ defmodule Defr.NestedStateTest do
     # with `mock` macro
     assert {%Right{right: %User{id: 2, name: "chrismccord"}}, []} ==
              UserController.profile("2")
-             |> Defr.run(
+             |> MagicWand.run(
                mock(%{
                  &User.get_by_id/1 => Right.new(%User{id: 2, name: "chrismccord"})
                })

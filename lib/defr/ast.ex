@@ -1,4 +1,4 @@
-defmodule Defr.AST do
+defmodule MagicWand.AST do
   @moduledoc false
 
   def is_module_ast({:__aliases__, _, _}), do: true

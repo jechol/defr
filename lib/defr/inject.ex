@@ -1,7 +1,7 @@
-defmodule Defr.Inject do
+defmodule MagicWand.Inject do
   @moduledoc false
 
-  alias Defr.AST
+  alias MagicWand.AST
 
   @uninjectable [:erlang, Kernel, Kernel.Utils]
   @modifiers [:import, :require, :use]
@@ -45,7 +45,7 @@ defmodule Defr.Inject do
                use Witchcraft.Monad
 
                monad %Algae.State{runner: nil} do
-                 %Defr.InOut{input: input} <- Algae.State.get()
+                 %MagicWand.InOut{input: input} <- Algae.State.get()
 
                  return(unquote(injected_blk))
                end
@@ -165,7 +165,7 @@ defmodule Defr.Inject do
       arity = Enum.count(args)
 
       quote do
-        Defr.Runner.run({unquote(mod), unquote(name), unquote(arity)}, unquote(args), input)
+        MagicWand.Runner.run({unquote(mod), unquote(name), unquote(arity)}, unquote(args), input)
       end
     else
       ast

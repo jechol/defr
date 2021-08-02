@@ -1,4 +1,4 @@
-defmodule Defr.Runner do
+defmodule MagicWand.Runner do
   alias Algae.State
 
   def run({m, f, a}, args, input) do
@@ -8,8 +8,8 @@ defmodule Defr.Runner do
 
     case ret do
       %State{} = state ->
-        {value, new_output} = state |> Defr.run(input)
-        Defr.tell(new_output)
+        {value, new_output} = state |> MagicWand.run(input)
+        MagicWand.tell(new_output)
         value
 
       value ->

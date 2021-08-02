@@ -1,7 +1,7 @@
-defmodule Defr.Inject.InjectAstRecursivelyTest do
+defmodule MagicWand.Inject.InjectAstRecursivelyTest do
   use ExUnit.Case, async: true
-  require Defr.Inject
-  alias Defr.Inject
+  require MagicWand.Inject
+  alias MagicWand.Inject
 
   test "capture is not expanded" do
     blk =
@@ -58,7 +58,7 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
         case 1 == 1 do
           x when x == true ->
-            Defr.Runner.run({Math, :pow, 2}, [2, x], input)
+            MagicWand.Runner.run({Math, :pow, 2}, [2, x], input)
         end
       end
 
@@ -85,9 +85,9 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
     expected =
       quote do
-        Defr.Runner.run({Calc, :to_int, 1}, [a], input) >>>
+        MagicWand.Runner.run({Calc, :to_int, 1}, [a], input) >>>
           fn a_int ->
-            Defr.Runner.run({Calc, :to_int, 1}, [b], input) >>> fn b_int -> a_int + b_int end
+            MagicWand.Runner.run({Calc, :to_int, 1}, [b], input) >>> fn b_int -> a_int + b_int end
           end
       end
 
@@ -103,9 +103,9 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
 
     expected =
       quote do
-        Defr.Runner.run({Calc, :to_int, 1}, [a], input) >>>
+        MagicWand.Runner.run({Calc, :to_int, 1}, [a], input) >>>
           fn a_int ->
-            (fn b_int -> a_int + b_int end).(Defr.Runner.run({Calc, :to_int, 1}, [b], input))
+            (fn b_int -> a_int + b_int end).(MagicWand.Runner.run({Calc, :to_int, 1}, [b], input))
           end
       end
 
@@ -130,16 +130,16 @@ defmodule Defr.Inject.InjectAstRecursivelyTest do
     expected =
       quote do
         try do
-          Defr.Runner.run({Calc, :id, 1}, [:try], input)
+          MagicWand.Runner.run({Calc, :id, 1}, [:try], input)
         rescue
           e in ArithmeticError ->
-            Defr.Runner.run({Calc, :id, 1}, [e], input)
+            MagicWand.Runner.run({Calc, :id, 1}, [e], input)
         catch
           :error, number ->
-            Defr.Runner.run({Calc, :id, 1}, [number], input)
+            MagicWand.Runner.run({Calc, :id, 1}, [number], input)
         else
           x ->
-            Defr.Runner.run({Calc, :id, 1}, [:else], input)
+            MagicWand.Runner.run({Calc, :id, 1}, [:else], input)
         end
       end
 

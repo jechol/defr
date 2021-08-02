@@ -1,4 +1,4 @@
-defmodule Defr do
+defmodule MagicWand do
   alias Algae.State
 
   defmodule InOut do
@@ -11,12 +11,12 @@ defmodule Defr do
 
   defmacro __using__(_) do
     quote do
-      import Defr, only: :macros
+      import MagicWand, only: :macros
       use Witchcraft.Monad
-      alias Defr.InOut
+      alias MagicWand.InOut
 
       Module.register_attribute(__MODULE__, :defr_funs, accumulate: true)
-      @before_compile unquote(Defr.Inject)
+      @before_compile unquote(MagicWand.Inject)
     end
   end
 
@@ -36,7 +36,7 @@ defmodule Defr do
   @doc """
   `defr` transforms a function to accept a map where dependent functions and modules can be injected.
 
-      use Defr
+      use MagicWand
 
       defr send_welcome_email(user_id) do
         %{email: email} = Repo.get(User, user_id)
@@ -91,7 +91,7 @@ defmodule Defr do
   end
 
   defp do_defr(def_type, head, body, env) do
-    alias Defr.Inject
+    alias MagicWand.Inject
 
     original = {def_type, [context: Elixir, import: Kernel], [head, body]}
 
@@ -117,7 +117,7 @@ defmodule Defr do
   @doc """
   If you don't need pattern matching in mock function, `mock/1` can be used to reduce boilerplates.
 
-      use Defr
+      use MagicWand
 
       test "send_welcome_email with mock/1" do
         Accounts.send_welcome_email(100) |> Reader.run(
@@ -132,7 +132,7 @@ defmodule Defr do
   Note that `Process.send(self(), :email_sent)` is surrounded by `fn _ -> end` when expanded.
   """
   defmacro mock({:%{}, context, mocks}) do
-    alias Defr.Mock
+    alias MagicWand.Mock
 
     {:%{}, context, mocks |> Enum.map(&Mock.decorate_with_fn/1)}
   end

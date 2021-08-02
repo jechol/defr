@@ -1,5 +1,5 @@
 defmodule ImportInInject do
-  use Defr
+  use MagicWand
 
   defr str_to_atom(str) do
     import Calc

@@ -1,7 +1,7 @@
-defmodule Defr.Inject.InjectFunctionTest do
+defmodule MagicWand.Inject.InjectFunctionTest do
   use ExUnit.Case, async: true
-  require Defr.Inject
-  alias Defr.Inject
+  require MagicWand.Inject
+  alias MagicWand.Inject
 
   test "defr" do
     {:defr, _, [head, body]} =
@@ -19,11 +19,11 @@ defmodule Defr.Inject.InjectFunctionTest do
           use Witchcraft.Monad
 
           monad %Algae.State{runner: nil} do
-            %Defr.InOut{input: input} <- Algae.State.get()
+            %MagicWand.InOut{input: input} <- Algae.State.get()
 
             return(
               (
-                Defr.Runner.run({Calc, :sum, 2}, [a, b], input)
+                MagicWand.Runner.run({Calc, :sum, 2}, [a, b], input)
 
                 (
                   import Calc

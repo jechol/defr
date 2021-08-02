@@ -1,3 +1,3 @@
 use Mix.Config
 
-config :defr, :trace, false
+config :magic_wand, :trace, false

@@ -1,4 +1,4 @@
-defmodule Defr.Mock do
+defmodule MagicWand.Mock do
   @moduledoc false
   alias Algae.State
 
@@ -15,7 +15,7 @@ defmodule Defr.Mock do
 
     value =
       quote do
-        Defr.Mock.wrap_if_reader(
+        MagicWand.Mock.wrap_if_reader(
           {unquote(m), unquote(f), unquote(a)},
           unquote(const_fn),
           unquote(const_state_fn)
@@ -26,7 +26,7 @@ defmodule Defr.Mock do
   end
 
   def wrap_if_reader({m, f, a}, const_fn, const_state_fn) do
-    if Defr.Runner.is_defr_fun?({m, f, a}) do
+    if MagicWand.Runner.is_defr_fun?({m, f, a}) do
       const_state_fn
     else
       const_fn

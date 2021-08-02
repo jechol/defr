@@ -1,11 +1,11 @@
-defmodule Defr.MixProject do
+defmodule MagicWand.MixProject do
   use Mix.Project
 
   @version "0.1.0"
 
   def project do
     [
-      app: :defr,
+      app: :magic_wand,
       version: @version,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
@@ -13,7 +13,7 @@ defmodule Defr.MixProject do
       deps: deps(),
       package: package(),
       description: "Helper for Witchcraft's Reader monad",
-      source_url: "https://github.com/trevorite/defr",
+      source_url: "https://github.com/trevorite/magic_wand",
       docs: docs()
     ]
   end
@@ -43,7 +43,7 @@ defmodule Defr.MixProject do
   defp package do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/trevorite/defr"},
+      links: %{"GitHub" => "https://github.com/trevorite/magic_wand"},
       maintainers: ["Jechol Lee(mr.trevorite@gmail.com)"]
     ]
   end
@@ -51,9 +51,9 @@ defmodule Defr.MixProject do
   defp docs() do
     [
       main: "readme",
-      name: "defr",
-      canonical: "http://hexdocs.pm/defr",
-      source_url: "https://github.com/trevorite/defr",
+      name: "magic_wand",
+      canonical: "http://hexdocs.pm/magic_wand",
+      source_url: "https://github.com/trevorite/magic_wand",
       extras: [
         "README.md"
       ]

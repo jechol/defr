@@ -1,17 +1,17 @@
-[![mix test](https://github.com/trevorite/defr/workflows/mix%20test/badge.svg)](https://github.com/trevorite/defr/actions)
-[![Hex version badge](https://img.shields.io/hexpm/v/defr.svg)](https://hex.pm/packages/defr)
-[![License badge](https://img.shields.io/hexpm/l/defr.svg)](https://github.com/trevorite/defr/blob/master/LICENSE.md)
+[![mix test](https://github.com/trevorite/magic_wand/workflows/mix%20test/badge.svg)](https://github.com/trevorite/magic_wand/actions)
+[![Hex version badge](https://img.shields.io/hexpm/v/magic_wand.svg)](https://hex.pm/packages/magic_wand)
+[![License badge](https://img.shields.io/hexpm/l/magic_wand.svg)](https://github.com/trevorite/magic_wand/blob/master/LICENSE.md)
 
 `defr` is `def` for Witchcraft's Reader monads.
 
 ## Installation
 
-The package can be installed by adding `defr` to your list of dependencies
+The package can be installed by adding `magic_wand` to your list of dependencies
 in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:defr, "~> 0.1"}]
+  [{:magic_wand, "~> 0.1"}]
 end
 ```
 
@@ -24,14 +24,14 @@ locals_without_parens: [defr: 2]
 ## Usage
 
 ```elixir
-defmodule Defr.NestedCallTest do
+defmodule MagicWand.NestedCallTest do
   use ExUnit.Case, async: true
-  use Defr
+  use MagicWand
   alias Algae.Reader
   alias Algae.Either.Right
 
   defmodule User do
-    use Defr
+    use MagicWand
 
     defstruct [:id, :name]
 
@@ -41,7 +41,7 @@ defmodule Defr.NestedCallTest do
   end
 
   defmodule Accounts do
-    use Defr
+    use MagicWand
 
     defr get_user_by_id(user_id) do
       monad %Right{} do
@@ -52,7 +52,7 @@ defmodule Defr.NestedCallTest do
   end
 
   defmodule UserController do
-    use Defr
+    use MagicWand
 
     defr profile(user_id_str) do
       user_id = String.to_integer(user_id_str)
