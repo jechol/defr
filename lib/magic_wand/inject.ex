@@ -55,7 +55,7 @@ defmodule MagicWand.Inject do
     case def_type do
       :def ->
         quote do
-          @defr_funs unquote(fa)
+          @magic_funs unquote(fa)
           unquote(definition)
         end
 

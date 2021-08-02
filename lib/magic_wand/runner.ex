@@ -18,7 +18,7 @@ defmodule MagicWand.Runner do
   end
 
   def is_defr_fun?({m, f, a}) do
-    Kernel.function_exported?(m, :__defr_funs__, 0) and
-      {f, a} in Kernel.apply(m, :__defr_funs__, [])
+    Kernel.function_exported?(m, :__magic_funs__, 0) and
+      {f, a} in Kernel.apply(m, :__magic_funs__, [])
   end
 end

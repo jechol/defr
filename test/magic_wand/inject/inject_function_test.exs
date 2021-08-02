@@ -14,7 +14,7 @@ defmodule MagicWand.Inject.InjectFunctionTest do
 
     expected =
       quote do
-        @defr_funs {:add, 2}
+        @magic_funs {:add, 2}
         def add(a, b) do
           use Witchcraft.Monad
 

@@ -15,15 +15,15 @@ defmodule MagicWand do
       use Witchcraft.Monad
       alias MagicWand.InOut
 
-      Module.register_attribute(__MODULE__, :defr_funs, accumulate: true)
+      Module.register_attribute(__MODULE__, :magic_funs, accumulate: true)
       @before_compile unquote(MagicWand)
     end
   end
 
   defmacro __before_compile__(_env) do
     quote do
-      def __defr_funs__ do
-        @defr_funs
+      def __magic_funs__ do
+        @magic_funs
       end
     end
   end
