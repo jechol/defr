@@ -1,4 +1,6 @@
 defmodule MagicWand.Runner do
+  @moduledoc false
+
   alias Algae.State
 
   def run({m, f, a}, args, input) do
