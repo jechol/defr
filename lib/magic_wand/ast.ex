@@ -20,15 +20,4 @@ defmodule MagicWand.AST do
   def unquote_module_ast(atom) when is_atom(atom) do
     atom
   end
-
-  def quote_function_capture({mod, name, arity}) do
-    mf = {{:., [], [mod, name]}, [no_parens: true], []}
-    mfa = {:/, [], [mf, arity]}
-    {:&, [], [mfa]}
-  end
-
-  def unquote_function_capture({:&, _, [{:/, _, [{{:., _, [mod, name]}, _, _}, arity]}]}) do
-    mod = unquote_module_ast(mod)
-    :erlang.make_fun(mod, name, arity)
-  end
 end
