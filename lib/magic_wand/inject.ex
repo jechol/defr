@@ -6,14 +6,6 @@ defmodule MagicWand.Inject do
   @uninjectable [:erlang, Kernel, Kernel.Utils]
   @modifiers [:import, :require, :use]
 
-  defmacro __before_compile__(_env) do
-    quote do
-      def __defr_funs__ do
-        @defr_funs
-      end
-    end
-  end
-
   def inject_function(def_type, head, body, %Macro.Env{file: file, line: line} = env)
       when is_list(body) do
     inject_results =
