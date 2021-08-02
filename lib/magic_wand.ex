@@ -26,11 +26,11 @@ defmodule MagicWand do
   end
 
   defp do_defr(def_type, head, body, env) do
-    alias MagicWand.Inject
+    alias MagicWand.Injector
 
     original = {def_type, [context: Elixir, import: Kernel], [head, body]}
 
-    Inject.inject_function(def_type, head, body, env)
+    Injector.inject_function(def_type, head, body, env)
     |> Tracer.trace(original, env)
   end
 

@@ -1,7 +1,7 @@
-defmodule MagicWand.Inject.InjectAstRecursivelyTest do
+defmodule MagicWand.Injector.InjectAstRecursivelyTest do
   use ExUnit.Case, async: true
-  require MagicWand.Inject
-  alias MagicWand.Inject
+  require MagicWand.Injector
+  alias MagicWand.Injector
 
   test "capture is not expanded" do
     blk =
@@ -9,7 +9,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         &Calc.sum/2
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(blk) == Macro.to_string(actual)
   end
 
@@ -19,7 +19,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         conn.assigns
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(blk) == Macro.to_string(actual)
   end
 
@@ -30,7 +30,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         Kernel.+(100, 200)
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(blk) == Macro.to_string(actual)
   end
 
@@ -62,7 +62,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         end
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(expected) == Macro.to_string(actual)
   end
 
@@ -74,7 +74,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         sum(a, b)
       end
 
-    assert {:error, :modifier} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:error, :modifier} = Injector.inject_ast_recursively(blk, __ENV__)
   end
 
   test "operator case 1" do
@@ -91,7 +91,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
           end
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(expected) == Macro.to_string(actual)
   end
 
@@ -109,7 +109,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
           end
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(expected) == Macro.to_string(actual)
   end
 
@@ -143,7 +143,7 @@ defmodule MagicWand.Inject.InjectAstRecursivelyTest do
         end
       end
 
-    assert {:ok, actual} = Inject.inject_ast_recursively(blk, __ENV__)
+    assert {:ok, actual} = Injector.inject_ast_recursively(blk, __ENV__)
     assert Macro.to_string(expected) == Macro.to_string(actual)
   end
 end

@@ -1,7 +1,7 @@
-defmodule MagicWand.Inject.InjectFunctionTest do
+defmodule MagicWand.Injector.InjectFunctionTest do
   use ExUnit.Case, async: true
-  require MagicWand.Inject
-  alias MagicWand.Inject
+  require MagicWand.Injector
+  alias MagicWand.Injector
 
   test "defr" do
     {:defr, _, [head, body]} =
@@ -35,7 +35,7 @@ defmodule MagicWand.Inject.InjectFunctionTest do
         end
       end
 
-    actual = Inject.inject_function(:def, head, body, env_with_macros())
+    actual = Injector.inject_function(:def, head, body, env_with_macros())
     assert Macro.to_string(expected) == Macro.to_string(actual)
   end
 

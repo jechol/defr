@@ -1,4 +1,4 @@
-defmodule MagicWand.Inject do
+defmodule MagicWand.Injector do
   @moduledoc false
 
   alias MagicWand.AST
