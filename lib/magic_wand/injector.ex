@@ -37,9 +37,11 @@ defmodule MagicWand.Injector do
                use Witchcraft.Monad
 
                monad %Algae.State{runner: nil} do
-                 %MagicWand.InputOutput{input: input} <- Algae.State.get()
+                 %MagicWand.Token{input: input} <- Algae.State.get()
 
-                 let {val, output} = unquote(injected_blk)
+                 let %MagicWand.Result{val: val, output: output} =
+                       unquote(injected_blk)
+                       |> MagicWand.Runner.to_result()
 
                  MagicWand.tell(output)
                  return(val)

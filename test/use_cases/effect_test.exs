@@ -36,7 +36,9 @@ defmodule MagicWand.TellTest do
   end
 
   test "create_user" do
-    assert MagicWand.result(%User{email: "test@gmail.com"}, [{&IO.puts/1, "user created"}]) ==
+    assert MagicWand.result(%User{email: "test@gmail.com"} |> Right.new(), [
+             {&IO.puts/1, "user created"}
+           ]) ==
              User.create_user("test@gmail.com") |> MagicWand.run(%{})
   end
 

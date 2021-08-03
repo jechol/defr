@@ -2,7 +2,7 @@ defmodule MagicWand.Runner do
   @moduledoc false
 
   alias Algae.State
-  # alias MagicWand.ValEffect
+  alias MagicWand.Result
 
   def call_fun({m, f, a}, args, input) do
     {{m, f, a}, args, input}
@@ -11,13 +11,15 @@ defmodule MagicWand.Runner do
 
     case ret do
       %State{} = state ->
-        # state |> MagicWand.run(input)
         state |> MagicWand.run(input)
 
       val ->
-        {val, []}
+        val
     end
   end
+
+  def to_result(%Result{} = r), do: r
+  def to_result(val), do: %Result{val: val, output: []}
 
   def is_defr_fun?({m, f, a}) do
     Kernel.function_exported?(m, :__magic_funs__, 0) and

@@ -1,4 +1,4 @@
-defmodule MagicWand.ValOutput do
+defmodule MagicWand.Result do
   defstruct val: nil, output: []
 
   def new(val, output) when is_list(output) do

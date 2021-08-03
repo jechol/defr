@@ -19,7 +19,7 @@ defmodule MagicWand.Injector.InjectFunctionTest do
           use Witchcraft.Monad
 
           monad %Algae.State{runner: nil} do
-            %MagicWand.InputOutput{input: input} <- Algae.State.get()
+            %MagicWand.Token{input: input} <- Algae.State.get()
 
             return(
               (
