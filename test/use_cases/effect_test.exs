@@ -5,6 +5,12 @@ defmodule MagicWand.TellTest do
   alias Algae.Either.Right
   require Logger
 
+  defmodule SMTPClient do
+    defr send_welcome(email) do
+      :ok |> Right.new()
+    end
+  end
+
   defmodule User do
     use MagicWand
 
@@ -17,32 +23,39 @@ defmodule MagicWand.TellTest do
     end
   end
 
-  defmodule SMTPClient do
-    defr send_welcome(email) do
-      :ok |> Right.new()
-    end
-  end
-
   defmodule Accounts do
     use MagicWand
 
     defr sign_up(email) do
-      chain do
-        user <- User.create_user(email)
+      monad %Right{} do
+        user <- User.create_user(email) |> IO.inspect(label: "either")
 
-        MagicWand.result(user, {&SMTPClient.send_welcome/1, email})
+        MagicWand.result(user |> Right.new(), {&SMTPClient.send_welcome/1, email})
       end
     end
   end
 
-  test "create_user" do
-    assert MagicWand.result(%User{email: "test@gmail.com"} |> Right.new(), [
-             {&IO.puts/1, "user created"}
-           ]) ==
-             User.create_user("test@gmail.com") |> MagicWand.run(%{})
+  test "User.create_user" do
+    assert %Result{
+             val: %Right{right: %User{email: "test@gmail.com"}},
+             output: [{&IO.puts/1, "user created"}]
+           } == User.create_user("test@gmail.com") |> MagicWand.run(%{})
   end
 
-  test "result" do
-    Accounts.sign_up("test1@gmail.com") |> MagicWand.run(%{}) |> IO.inspect()
+  test "User.create_user call_fun" do
+    assert %Result{
+             val: %Right{right: %User{email: "test@gmail.com"}},
+             output: [{&IO.puts/1, "user created"}]
+           } == MagicWand.Runner.call_fun({User, :create_user, 1}, ["test@gmail.com"], %{})
+  end
+
+  test "Accounts.result" do
+    assert %Result{
+             val: %Right{right: %User{email: "test@gmail.com"}},
+             output: [
+               {&IO.puts/1, "user created"},
+               {&SMTPClient.send_welcome/1, "test@gmail.com"}
+             ]
+           } == Accounts.sign_up("test1@gmail.com") |> MagicWand.run(%{})
   end
 end

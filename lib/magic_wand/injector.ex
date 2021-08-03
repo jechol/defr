@@ -44,7 +44,7 @@ defmodule MagicWand.Injector do
                        |> MagicWand.Runner.to_result()
 
                  MagicWand.tell(output)
-                 return(val)
+                 return(val |> IO.inspect(label: "returned"))
                end
              end}
 

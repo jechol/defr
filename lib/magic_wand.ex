@@ -6,7 +6,7 @@ defmodule MagicWand do
     quote do
       import MagicWand, only: [defr: 2, mock: 1, run: 2, tell: 1]
       use Witchcraft.Monad
-      alias MagicWand.Token
+      alias MagicWand.Result
 
       Module.register_attribute(__MODULE__, :magic_funs, accumulate: true)
       @before_compile unquote(MagicWand)
@@ -41,12 +41,15 @@ defmodule MagicWand do
   end
 
   def run(%State{} = state, %{} = input) do
-    {val, %Token{input: ^input, output: output}} = state |> State.run(%Token{input: input})
+    {val, %Token{input: ^input, output: output}} =
+      state |> State.run(%Token{input: input}) |> IO.inspect(label: "Wand.run")
+
     %Result{val: val, output: output}
   end
 
   def tell(new_output) when is_list(new_output) do
     State.modify(fn %Token{input: input, output: output} ->
+      {output, new_output} |> IO.inspect(label: "MagicWand.tell")
       %Token{input: input, output: output ++ new_output}
     end)
   end

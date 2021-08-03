@@ -18,7 +18,7 @@ defmodule MagicWand.Runner do
     end
   end
 
-  def to_result(%Result{} = r), do: r
+  def to_result(%Result{} = r), do: r |> IO.inspect(label: "skipped")
   def to_result(val), do: %Result{val: val, output: []}
 
   def is_defr_fun?({m, f, a}) do
