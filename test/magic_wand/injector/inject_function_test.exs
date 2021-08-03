@@ -19,11 +19,11 @@ defmodule MagicWand.Injector.InjectFunctionTest do
           use Witchcraft.Monad
 
           monad %Algae.State{runner: nil} do
-            %MagicWand.InOut{input: input} <- Algae.State.get()
+            %MagicWand.InputOutput{input: input} <- Algae.State.get()
 
             return(
               (
-                MagicWand.Runner.run({Calc, :sum, 2}, [a, b], input)
+                MagicWand.Runner.call_fun({Calc, :sum, 2}, [a, b], input)
 
                 (
                   import Calc

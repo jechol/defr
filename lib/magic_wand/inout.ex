@@ -1,4 +1,4 @@
-defmodule MagicWand.InOut do
+defmodule MagicWand.InputOutput do
   @moduledoc false
 
   defstruct input: %{}, output: []

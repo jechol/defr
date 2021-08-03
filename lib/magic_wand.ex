@@ -1,12 +1,12 @@
 defmodule MagicWand do
-  alias MagicWand.{InOut, Tracer}
+  alias MagicWand.{InputOutput, ValOutput, Tracer}
   alias Algae.State
 
   defmacro __using__(_) do
     quote do
-      import MagicWand, only: :macros
+      import MagicWand, only: [defr: 2, mock: 1, run: 2, tell: 1]
       use Witchcraft.Monad
-      alias MagicWand.InOut
+      alias MagicWand.InputOutput
 
       Module.register_attribute(__MODULE__, :magic_funs, accumulate: true)
       @before_compile unquote(MagicWand)
@@ -41,15 +41,27 @@ defmodule MagicWand do
   end
 
   def run(%State{} = state, %{} = input) do
-    {value, %InOut{input: ^input, output: output}} = state |> State.run(%InOut{input: input})
-    {value, output}
+    {val, %InputOutput{input: ^input, output: output}} =
+      state |> State.run(%InputOutput{input: input})
+
+    case val do
+      %ValOutput{val: val, output: output} -> {val, output ++ output}
+      val -> {val, []}
+    end
+
+    # {val, output}
+    # ValOutput.new(val, output)
   end
 
   def tell(new_output) when is_list(new_output) do
-    State.modify(fn %InOut{input: input, output: output} ->
-      %InOut{input: input, output: output ++ new_output}
+    State.modify(fn %InputOutput{input: input, output: output} ->
+      %InputOutput{input: input, output: output ++ new_output}
     end)
   end
 
   def tell(new_output), do: tell([new_output])
+
+  def result(val, output) do
+    ValOutput.new(val, output)
+  end
 end

@@ -37,9 +37,12 @@ defmodule MagicWand.Injector do
                use Witchcraft.Monad
 
                monad %Algae.State{runner: nil} do
-                 %MagicWand.InOut{input: input} <- Algae.State.get()
+                 %MagicWand.InputOutput{input: input} <- Algae.State.get()
 
-                 return(unquote(injected_blk))
+                 let {val, output} = unquote(injected_blk)
+
+                 MagicWand.tell(output)
+                 return(val)
                end
              end}
 
@@ -157,7 +160,11 @@ defmodule MagicWand.Injector do
       arity = Enum.count(args)
 
       quote do
-        MagicWand.Runner.run({unquote(mod), unquote(name), unquote(arity)}, unquote(args), input)
+        MagicWand.Runner.call_fun(
+          {unquote(mod), unquote(name), unquote(arity)},
+          unquote(args),
+          input
+        )
       end
     else
       ast

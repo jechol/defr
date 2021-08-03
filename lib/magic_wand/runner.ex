@@ -2,20 +2,20 @@ defmodule MagicWand.Runner do
   @moduledoc false
 
   alias Algae.State
+  # alias MagicWand.ValEffect
 
-  def run({m, f, a}, args, input) do
+  def call_fun({m, f, a}, args, input) do
     {{m, f, a}, args, input}
     fun = :erlang.make_fun(m, f, a)
     ret = Map.get(input, fun, fun) |> :erlang.apply(args)
 
     case ret do
       %State{} = state ->
-        {value, new_output} = state |> MagicWand.run(input)
-        MagicWand.tell(new_output)
-        value
+        # state |> MagicWand.run(input)
+        state |> MagicWand.run(input)
 
-      value ->
-        value
+      val ->
+        {val, []}
     end
   end
 
